@@ -24,7 +24,7 @@ export class BlogController {
     return await this.blogService.getBlogById(id);
   }
 
-  @Post()
+  @Post('/create')
   async createBlog(@Body() createBlogDto: CreateBlogDto) {
     return await this.blogService.createBlog(createBlogDto);
   }
