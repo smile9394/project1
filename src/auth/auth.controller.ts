@@ -6,12 +6,16 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
+  Req,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateAuthDto } from './dto/create-auth.dto';
 import { UpdateAuthDto } from './dto/update-auth.dto';
 import { CreateUserDto } from '../user/dto/create-user.dto';
 import { LoginUserDto } from '../user/dto/login-user.dto';
+import { LocalAuthGuard } from './guards/local-auth.guard';
+import { RequestWithUserInterface } from './interfaces/requestWithUser.interface';
 
 @Controller('auth')
 export class AuthController {
@@ -25,7 +29,8 @@ export class AuthController {
 
   // 로그인
   @Post('/login')
-  async loginUser(@Body() loginUserDto: LoginUserDto) {
-    return await this.authService.loginUser(loginUserDto);
+  @UseGuards(LocalAuthGuard)
+  async loginUser(@Req() req: RequestWithUserInterface) {
+    return req.user;
   }
 }
