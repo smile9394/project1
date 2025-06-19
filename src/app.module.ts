@@ -20,6 +20,10 @@ import * as Joi from '@hapi/joi';
         POSTGRES_DB: Joi.string().required(),
 
         SERVER_PORT: Joi.number().required(),
+
+        EMAIL_SERVICE: Joi.string().required(),
+        EMAIL_USER: Joi.string().required(),
+        EMAIL_PASSWORD: Joi.string().required(),
       }),
     }),
     BlogModule,
