@@ -12,7 +12,8 @@ export class AuthService {
       const createdUser = await this.userService.createUser(createUserDto);
       return createdUser;
     } catch (error) {
-      if (error?.code === 23305) {
+      console.log(error);
+      if (error?.code === '23505') {
         throw new HttpException(
           'user with that email already exists',
           HttpStatus.BAD_REQUEST,
