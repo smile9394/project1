@@ -20,7 +20,7 @@ export class AuthController {
   // 회원가입
   @Post('/signup')
   async registerUser(@Body() createUserDto: CreateUserDto) {
-    return await this.authService.signinUser(createUserDto);
+    return await this.authService.signupUser(createUserDto);
   }
 
   // 로그인

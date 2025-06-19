@@ -3,15 +3,24 @@ import { UserService } from '../user/user.service';
 import { CreateUserDto } from '../user/dto/create-user.dto';
 import { LoginUserDto } from '../user/dto/login-user.dto';
 import * as bcrypt from 'bcryptjs';
+import { EmailService } from '../email/email.service';
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly emailService: EmailService,
+  ) {}
 
   // 회원가입
-  async signinUser(createUserDto: CreateUserDto) {
+  async signupUser(createUserDto: CreateUserDto) {
     try {
       const createdUser = await this.userService.createUser(createUserDto);
+      await this.emailService.sendMail({
+        to: createUserDto.email,
+        subject: 'welcome Sungwoo Blog',
+        text: 'welcome to Sungwoo Blog',
+      });
       return createdUser;
     } catch (error) {
       console.log(error);
@@ -37,6 +46,7 @@ export class AuthService {
     if (!isPasswordMatched) {
       throw new HttpException('password do not match', HttpStatus.BAD_REQUEST);
     }
+
     return user;
   }
 }
