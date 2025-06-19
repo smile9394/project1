@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { BlogModule } from './blog/blog.module';
 import { DatabaseModule } from './database/database.module';
 import { ConfigModule } from '@nestjs/config';
+import { UserModule } from './user/user.module';
 import * as Joi from '@hapi/joi';
 
 @Module({
@@ -21,6 +22,7 @@ import * as Joi from '@hapi/joi';
     }),
     BlogModule,
     DatabaseModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],
