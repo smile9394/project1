@@ -18,6 +18,8 @@ import { LocalAuthGuard } from './guards/local-auth.guard';
 import { RequestWithUserInterface } from './interfaces/requestWithUser.interface';
 import { ApiBody } from '@nestjs/swagger';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { EmailUserDto } from '../user/dto/email-user.dto';
+import { VerifyEmailDto } from '../user/dto/verify-email.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -45,4 +47,19 @@ export class AuthController {
   async getUserInfoByToken(@Req() req: RequestWithUserInterface) {
     return req.user;
   }
+
+  // 가입 완료 이메일 전송
+  @Post('/email/send')
+  @ApiBody({ type: EmailUserDto })
+  async sendEmail(@Body() emailUserDto: EmailUserDto) {
+    return await this.authService.sendEmail(emailUserDto);
+  }
+
+  // 인증코드 비교
+  @Post('/email/verify')
+  async verifyEmailWithCode(@Body() verifyEmailDto: VerifyEmailDto) {
+    return await this.authService.verifyEmail(verifyEmailDto);
+  }
 }
+
+//controller 에 앤드포인트를 만들어놓고 서비스를 구현
