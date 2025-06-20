@@ -1,26 +1,27 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { AgreeOfTerm } from './entities/agree-of-term.entity';
+import { Repository } from 'typeorm';
+import { UserService } from '../user/user.service';
+import { User } from '../user/entities/user.entity';
 import { CreateAgreeOfTermDto } from './dto/create-agree-of-term.dto';
-import { UpdateAgreeOfTermDto } from './dto/update-agree-of-term.dto';
 
 @Injectable()
 export class AgreeOfTermsService {
-  create(createAgreeOfTermDto: CreateAgreeOfTermDto) {
-    return 'This action adds a new agreeOfTerm';
-  }
+  constructor(
+    @InjectRepository(AgreeOfTerm)
+    private agreeOfTermRepository: Repository<AgreeOfTerm>,
+    private readonly userService: UserService,
+  ) {}
 
-  findAll() {
-    return `This action returns all agreeOfTerms`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} agreeOfTerm`;
-  }
-
-  update(id: number, updateAgreeOfTermDto: UpdateAgreeOfTermDto) {
-    return `This action updates a #${id} agreeOfTerm`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} agreeOfTerm`;
+  async updateAgreeOfTerm(
+    user: User,
+    updateAgreeOfTermDto: CreateAgreeOfTermDto,
+  ) {
+    const existedUser = await this.userService.getUserByEmail(user.email);
+    // return await this.agreeOfTermRepository.update(
+    //   { id: existedUser.agreeOfTerm.id },
+    //   updateAgreeOfTermDto,
+    // );
   }
 }
