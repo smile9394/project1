@@ -35,8 +35,9 @@ export class AuthController {
   @ApiBody({ type: LoginUserDto })
   async loginUser(@Req() req: RequestWithUserInterface) {
     const user = await req.user;
-    const token = this.authService.generateAccessToken(user.id);
-    return { user, token };
+    const accessToken = this.authService.generateAccessToken(user.id);
+    const refreshToken = this.authService.generateRefreshToken(user.id);
+    return { user, accessToken, refreshToken };
   }
   // 로그인한 유저 정보 확인
   @Get()

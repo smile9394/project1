@@ -58,10 +58,20 @@ export class AuthService {
   // accessToken 생성하는 메서드 -> 다른페이지 가도 로그인 유지
   public generateAccessToken(userId: string) {
     const payload: TokenPayloadInterface = { userId };
-    const token = this.jwtService.sign(payload, {
+    const accessToken = this.jwtService.sign(payload, {
       secret: this.configService.get('ACCESS_TOKEN_SECURITY'),
       expiresIn: this.configService.get('ACCESS_TOKEN_EXPIRATION_TIME'),
     });
-    return token;
+    return accessToken;
+  }
+
+  // refreshToken 생성하는 함수
+  public generateRefreshToken(userId: string) {
+    const payload: TokenPayloadInterface = { userId };
+    const refreshToken = this.jwtService.sign(payload, {
+      secret: this.configService.get('REFRESH_TOKEN_SECURITY'),
+      expiresIn: this.configService.get('REFRESH_TOKEN_EXPIRATION_TIME'),
+    });
+    return refreshToken;
   }
 }
