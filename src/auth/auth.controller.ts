@@ -16,6 +16,7 @@ import { CreateUserDto } from '../user/dto/create-user.dto';
 import { LoginUserDto } from '../user/dto/login-user.dto';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { RequestWithUserInterface } from './interfaces/requestWithUser.interface';
+import { ApiBody } from '@nestjs/swagger';
 
 @Controller('auth')
 export class AuthController {
@@ -30,7 +31,10 @@ export class AuthController {
   // 로그인
   @Post('/login')
   @UseGuards(LocalAuthGuard)
+  @ApiBody({ type: LoginUserDto })
   async loginUser(@Req() req: RequestWithUserInterface) {
-    return req.user;
+    const user = await req.user;
+    const token = this.authService.generateAccessToken(user.id);
+    return { user, token };
   }
 }

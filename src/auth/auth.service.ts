@@ -4,12 +4,18 @@ import { CreateUserDto } from '../user/dto/create-user.dto';
 import { LoginUserDto } from '../user/dto/login-user.dto';
 import * as bcrypt from 'bcryptjs';
 import { EmailService } from '../email/email.service';
+import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
+import { TokenPayloadInterface } from './interfaces/tokenPayload.interface';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly userService: UserService,
     private readonly emailService: EmailService,
+    //의존성 주입
+    private readonly jwtService: JwtService,
+    private readonly configService: ConfigService,
   ) {}
 
   // 회원가입
@@ -48,5 +54,14 @@ export class AuthService {
     }
 
     return user;
+  }
+  // accessToken 생성하는 메서드 -> 다른페이지 가도 로그인 유지
+  public generateAccessToken(userId: string) {
+    const payload: TokenPayloadInterface = { userId };
+    const token = this.jwtService.sign(payload, {
+      secret: this.configService.get('ACCESS_TOKEN_SECURITY'),
+      expiresIn: this.configService.get('ACCESS_TOKEN_EXPIRATION_TIME'),
+    });
+    return token;
   }
 }
